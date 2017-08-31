@@ -1,0 +1,157 @@
+<html>
+<head>
+<title>starter.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #606366; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(98,151,85); font-style: italic; }
+.s1 { color: rgb(169,183,198); }
+.s2 { color: rgb(204,120,50); font-weight: bold; }
+.s3 { color: rgb(104,151,187); }
+.s4 { color: rgb(204,120,50); }
+.s5 { color: rgb(128,128,128); }
+.s6 { color: rgb(0,128,128); }
+</style>
+</head>
+<BODY BGCOLOR="#2b2b2b">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+starter.py</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">&quot;&quot;&quot; 
+Sprite Collect Coins 
+ 
+Simple program to show basic sprite usage. 
+ 
+Artwork from http://kenney.nl 
+&quot;&quot;&quot;</span><span class="s1"> 
+</span><span class="s2">import </span><span class="s1">random 
+</span><span class="s2">import </span><span class="s1">arcade 
+ 
+SPRITE_SCALING = </span><span class="s3">1</span><span class="s1"> 
+ 
+SCREEN_WIDTH = </span><span class="s3">1024</span><span class="s1"> 
+SCREEN_HEIGHT = </span><span class="s3">768</span><span class="s1"> 
+ 
+ 
+</span><span class="s2">class </span><span class="s1">MyApplication(arcade.Window): 
+    </span><span class="s0">&quot;&quot;&quot; 
+    Main application class. 
+    &quot;&quot;&quot;</span><span class="s1"> 
+ 
+    </span><span class="s2">def </span><span class="s1">__init__(self</span><span class="s4">, </span><span class="s1">width</span><span class="s4">, </span><span class="s1">height): 
+        </span><span class="s0">&quot;&quot;&quot; Initializer &quot;&quot;&quot;</span><span class="s1"> 
+ 
+        </span><span class="s5"># Call the parent class initializer</span><span class="s1"> 
+        super().__init__(width</span><span class="s4">, </span><span class="s1">height) 
+ 
+        </span><span class="s5"># Background image will be stored in this variable</span><span class="s1"> 
+        self.background = </span><span class="s2">None</span><span class="s1"> 
+ 
+        </span><span class="s5"># Variables that will hold sprite lists</span><span class="s1"> 
+        self.all_sprites_list = </span><span class="s2">None</span><span class="s1"> 
+        self.coin_list = </span><span class="s2">None</span><span class="s1"> 
+ 
+        </span><span class="s5"># Set up the player info</span><span class="s1"> 
+        self.player_sprite = </span><span class="s2">None</span><span class="s1"> 
+        self.score = </span><span class="s3">0</span><span class="s1"> 
+        self.score_text = </span><span class="s2">None</span><span class="s1"> 
+ 
+        </span><span class="s5"># Don't show the mouse cursor</span><span class="s1"> 
+        self.set_mouse_visible(</span><span class="s2">False</span><span class="s1">) 
+ 
+        </span><span class="s5"># Set the background color</span><span class="s1"> 
+        arcade.set_background_color(arcade.color.AMAZON) 
+ 
+    </span><span class="s2">def </span><span class="s1">setup(self): 
+        </span><span class="s0">&quot;&quot;&quot; Set up the game and initialize the variables. &quot;&quot;&quot;</span><span class="s1"> 
+ 
+        </span><span class="s5"># Load the background image. Do this in the setup so we don't keep reloading it all the time.</span><span class="s1"> 
+        </span><span class="s5"># Image from:</span><span class="s1"> 
+        </span><span class="s5"># http://wallpaper-gallery.net/single/free-background-images/free-background-images-22.html</span><span class="s1"> 
+        self.background = arcade.load_texture(</span><span class="s6">&quot;images/background.jpg&quot;</span><span class="s1">) 
+ 
+        </span><span class="s5"># Sprite lists</span><span class="s1"> 
+        self.all_sprites_list = arcade.SpriteList() 
+        self.coin_list = arcade.SpriteList() 
+ 
+        </span><span class="s5"># Set up the player</span><span class="s1"> 
+        self.score = </span><span class="s3">0</span><span class="s1"> 
+        self.player_sprite = arcade.Sprite(</span><span class="s6">&quot;images/character.png&quot;</span><span class="s4">, </span><span class="s1">SPRITE_SCALING) 
+        self.player_sprite.center_x = </span><span class="s3">50</span><span class="s1"> 
+        self.player_sprite.center_y = </span><span class="s3">50</span><span class="s1"> 
+        self.all_sprites_list.append(self.player_sprite) 
+ 
+        </span><span class="s2">for </span><span class="s1">i </span><span class="s2">in </span><span class="s1">range(</span><span class="s3">50</span><span class="s1">): 
+ 
+            </span><span class="s5"># Create the coin instance</span><span class="s1"> 
+            coin = arcade.Sprite(</span><span class="s6">&quot;images/coin_01.png&quot;</span><span class="s4">, </span><span class="s1">SPRITE_SCALING / </span><span class="s3">3</span><span class="s1">) 
+ 
+            </span><span class="s5"># Position the coin</span><span class="s1"> 
+            coin.center_x = random.randrange(SCREEN_WIDTH) 
+            coin.center_y = random.randrange(SCREEN_HEIGHT) 
+ 
+            </span><span class="s5"># Add the coin to the lists</span><span class="s1"> 
+            self.all_sprites_list.append(coin) 
+            self.coin_list.append(coin) 
+ 
+    </span><span class="s2">def </span><span class="s1">on_draw(self): 
+        </span><span class="s0">&quot;&quot;&quot; 
+        Render the screen. 
+        &quot;&quot;&quot;</span><span class="s1"> 
+ 
+        </span><span class="s5"># This command has to happen before we start drawing</span><span class="s1"> 
+        arcade.start_render() 
+ 
+        </span><span class="s5"># Draw the background texture</span><span class="s1"> 
+        arcade.draw_texture_rectangle(SCREEN_WIDTH // </span><span class="s3">2</span><span class="s4">, </span><span class="s1">SCREEN_HEIGHT // </span><span class="s3">2</span><span class="s4">,</span><span class="s1"> 
+                                      SCREEN_WIDTH</span><span class="s4">, </span><span class="s1">SCREEN_HEIGHT</span><span class="s4">, </span><span class="s1">self.background) 
+ 
+        </span><span class="s5"># Draw all the sprites.</span><span class="s1"> 
+        self.coin_list.draw() 
+        self.player_sprite.draw() 
+ 
+        </span><span class="s5"># Put the text on the screen.</span><span class="s1"> 
+        output = </span><span class="s6">f&quot;Score: {self.score}&quot;</span><span class="s1"> 
+ 
+        </span><span class="s5"># Is this the same text as last frame? If not, set up a new text object</span><span class="s1"> 
+        </span><span class="s2">if not </span><span class="s1">self.score_text </span><span class="s2">or </span><span class="s1">output != self.score_text.text: 
+            self.score_text = arcade.create_text(output</span><span class="s4">, </span><span class="s1">arcade.color.WHITE</span><span class="s4">, </span><span class="s3">14</span><span class="s1">) 
+        </span><span class="s5"># Render the text</span><span class="s1"> 
+        arcade.render_text(self.score_text</span><span class="s4">, </span><span class="s3">10</span><span class="s4">, </span><span class="s3">20</span><span class="s1">) 
+ 
+    </span><span class="s2">def </span><span class="s1">on_mouse_motion(self</span><span class="s4">, </span><span class="s1">x</span><span class="s4">, </span><span class="s1">y</span><span class="s4">, </span><span class="s1">dx</span><span class="s4">, </span><span class="s1">dy): 
+        </span><span class="s0">&quot;&quot;&quot; 
+        Called whenever the mouse moves. 
+        &quot;&quot;&quot;</span><span class="s1"> 
+        self.player_sprite.center_x = x 
+        self.player_sprite.center_y = y 
+ 
+    </span><span class="s2">def </span><span class="s1">update(self</span><span class="s4">, </span><span class="s1">delta_time): 
+        </span><span class="s0">&quot;&quot;&quot; Movement and game logic &quot;&quot;&quot;</span><span class="s1"> 
+ 
+        </span><span class="s5"># Call update on all sprites (The sprites don't do much in this</span><span class="s1"> 
+        </span><span class="s5"># example though.)</span><span class="s1"> 
+        self.all_sprites_list.update() 
+ 
+        </span><span class="s5"># Generate a list of all sprites that collided with the player.</span><span class="s1"> 
+        hit_list = arcade.check_for_collision_with_list(self.player_sprite</span><span class="s4">, </span><span class="s1">self.coin_list) 
+ 
+        </span><span class="s5"># Loop through each colliding sprite, remove it, and add to the score.</span><span class="s1"> 
+        </span><span class="s2">for </span><span class="s1">coin </span><span class="s2">in </span><span class="s1">hit_list: 
+            coin.kill() 
+            self.score += </span><span class="s3">1</span><span class="s1"> 
+ 
+ 
+</span><span class="s2">def </span><span class="s1">main(): 
+    </span><span class="s0">&quot;&quot;&quot; Main method &quot;&quot;&quot;</span><span class="s1"> 
+    window = MyApplication(SCREEN_WIDTH</span><span class="s4">, </span><span class="s1">SCREEN_HEIGHT) 
+    window.setup() 
+    arcade.run() 
+ 
+</span><span class="s2">if </span><span class="s1">__name__ == </span><span class="s6">&quot;__main__&quot;</span><span class="s1">: 
+    main()</span></pre>
+</body>
+</html>
